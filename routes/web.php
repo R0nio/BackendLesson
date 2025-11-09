@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     })->name('categories.create');
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])
         ->name('categories.edit');
+    Route::get('/categories/products', [CategoryController::class, 'indexProductToCategory'])->name('categories.indexProducts');
 
 
     // POST

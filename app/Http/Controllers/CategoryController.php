@@ -47,6 +47,15 @@ class CategoryController extends Controller
         
     }
 
+    public function indexProductToCategory(){
+
+        $categories = Category::with('products')->get();
+
+        return view('categories.productToCategory', compact('categories'));
+
+
+    }
+
     public function destroy(Category $category)
     {
         $category->delete();
