@@ -12,7 +12,7 @@
                         @method('PUT')
                         @csrf
                         <label for="category_name">Новое название категории</label>
-                        <input class="w-full" type="text" name="category_name" placeholder="Например: гарнитура">
+                        <input value="{{ $category->category_name  }}" class="w-full" type="text" name="category_name" placeholder="Например: гарнитура">
                         <br>
                         <button class="w-auto border-2 border-gray-400 p-1 bg-white mt-3 text-[16px] font-medium" type="submit">Обновить</button>
                     </form>

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use Dotenv\Exception\ValidationException;
+use Dotenv\Parser\Parser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -11,24 +14,37 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category')->get();
 
         return view('dashboard', compact('products'));
     }
+    public function edit($id)
+        {
+            $product = Product::with('category')->findOrFail($id);
+            $categories = Category::all();
+            return view('products.edit', compact('categories', 'product'));
+        }
 
+    public function create () {
+        $categories = Category::all();
+        return view('products.create', compact( 'categories'));
+
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'path_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'path_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'required|int'
         ]);
 
         $product = new Product;
         $product->name = $validated['name'];
         $product->description = $validated['description'];
         $product->price = $validated['price'];
+        $product->category_id = $validated['category_id'];
 
         if ($request->hasFile('path_picture')) {
             $file = $request->file('path_picture');
@@ -49,18 +65,27 @@ class ProductController extends Controller
         return redirect()->route('dashboard');
     }
 
-    public function edit(Product $product)
-    {
-        return view('products.edit', compact('product'));
-    }
+    
 
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
 
-        $product->name = $request->validate(['name' => 'string']);
-        $product->description = $request->validate(['description' => 'string']);
-        $product->price = $request->validate(['price' => 'float']);
+        try{
+
+        $product = Product::findOrFail($id);
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'path_picture' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'required|integer|exists:categories,id'
+        ]);
+
+        $product->name = $data['name'];
+        $product->description = $data['description'];
+        $product->price = $data['price'];
+        $product->category_id = $data['category_id'];
+
 
         if ($request->hasFile('path_picture')) {
             $destination = 'uploads/products/' . $product->path_picture;
@@ -74,8 +99,17 @@ class ProductController extends Controller
             $product->path_picture = $filename;
         }
 
-        $product->update();
-        return redirect()->route('dashboard');
+        $product->save();
+        return redirect()->route('dashboard')->with('success', 'Товар успешно обновлен!');
+
+
+        }
+        catch(\Exception $ex){
+
+            return redirect()->back()->with('error', "Произошла ошибка: $ex")->withInput();
+
+        }
+       
     }
 
     public function destroy(Product $product)

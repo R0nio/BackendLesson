@@ -25,14 +25,18 @@
                     <img src="{{ $product->path_picture }}" class="w-[200px] h-[250px]"></img>
                     <p>Название продукта: {{ $product->name }}</p>
                     <p>Описание: {{ $product->description }}</p>
+                    <p>Категория: {{ $product->category->category_name }}</p>
                     <p> Цена: {{ $product->price }} ₽</p>
                     <div>
                         <a href="{{ route('products.edit', $product->id) }}"></a>
-                        <form action="{{ route('products.destroy', $product->id) }}">
+                        <form method="POST" action="{{ route('products.destroy', $product->id) }}">
                             @csrf
                             @method('delete')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
+                        <a href="{{ route('products.edit', $product->id) }}">
+                            Изменить
+                        </a>
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -31,13 +32,19 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
+        try{
         $data = $request->validate([
             'category_name' => 'string'
         ]);
 
         $category->update($data);
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'Категория успешно добавлена');
+
+        }catch(ValidationException $ex){
+            return redirect()->back()->with('error', "Произошла ошибка: $ex")->withInput();
+        }
+        
     }
 
     public function destroy(Category $category)
@@ -45,4 +52,7 @@ class CategoryController extends Controller
         $category->delete();
         return redirect()->back();
     }
+
+
+
 }

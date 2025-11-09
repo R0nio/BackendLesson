@@ -19,6 +19,14 @@
                         <label for="price">Цена</label>
                         <input class="w-full" type="number" name="price" placeholder="1000.00">
                         <br>
+                        <select name="category_id" id="">
+                            <option value=""></option>
+                            @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">
+                                {{ $category->category_name }} 
+                            </option>
+                            @endforeach 
+                        </select>
                         <label for="path_picture">Картинка</label>
                         <input class="w-full" type="file" name="path_picture">
                         <button class="w-auto border-2 border-gray-400 p-1 bg-white mt-3 text-[16px] font-medium" type="submit">Добавить</button>
