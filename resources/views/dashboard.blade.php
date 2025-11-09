@@ -13,9 +13,31 @@
                 </div>
             </div>
             <div class="grid grid-cols-4 mt-4 justify-items-center gap-4">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-solid border-2 border-gray-300 w-[280px] h-[400px]">
-                    
+
+                @if($products->isEmpty())
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-solid border-2 border-gray-300 w-[280px] h-[400px] flex flex-row justify-center p-4">
+                    <p>Ничего нету</p>
                 </div>
+                @endif
+
+                @foreach($products as $product)
+                <div class=" bg-white overflow-hidden shadow-sm sm:rounded-lg border-solid border-2 border-gray-300 w-[280px] h-[400px] flex flex-col justify-center items-center p-4">
+                    <img src="{{ $product->path_picture }}" class="w-[200px] h-[250px]"></img>
+                    <p>Название продукта: {{ $product->name }}</p>
+                    <p>Описание: {{ $product->description }}</p>
+                    <p> Цена: {{ $product->price }} ₽</p>
+                    <div>
+                        <a href="{{ route('products.edit', $product->id) }}"></a>
+                        <form action="{{ route('products.destroy', $product->id) }}">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+
+                @endforeach
+
             </div>
         </div>
     </div>
