@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -17,18 +20,35 @@ class CommentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function store(Request $request, $productId)
     {
-        //
+        try {
+
+            if(!Product::find($productId)){
+                return redirect()->back()->with('error', 'Товар не был найден!');
+            }
+
+            $userId = Auth::id();
+            $data = $request->validate([
+                'description' => 'required|string'
+            ]);
+
+            Comment::create([
+                'description' => $data['description'],
+                'product_id' => $productId,
+                'user_id' => $userId
+            ]);
+            
+            return redirect()->back()->with('success', 'Коммент успешно создан!');
+            
+            
+        } catch (\Exception $ex) {
+
+            return redirect()->back()->with('error', "Произошла ошибка: $ex");
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   
 
     /**
      * Display the specified resource.

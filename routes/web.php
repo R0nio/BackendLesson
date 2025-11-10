@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -61,6 +62,15 @@ Route::middleware('auth')->group(function () {
     // DELETE
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])
         ->name('products.destroy');
+
+
+
+    // Comment -> 
+
+
+    //POST 
+    Route::post('/dashboard/{product}/createcomment', [CommentController::class, 'store'])->name('comment.create');
+
 });
 
 require __DIR__ . '/auth.php';

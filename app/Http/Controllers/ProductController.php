@@ -14,7 +14,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with(['category', 'comments.user'])->get();
 
         return view('dashboard', compact('products'));
     }
@@ -37,7 +37,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'path_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|int'
+            'category_id' => 'required|integer|exists:categories,id'
         ]);
 
         $product = new Product;

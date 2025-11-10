@@ -19,7 +19,7 @@
                 @foreach($category->products as $product)
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-300 flex flex-col justify-between p-4 h-full">
                         @if($product->path_picture)
-                            <img src="{{ $product->path_picture }}" alt="{{ $product->name }}" class="w-full h-48 object-cover rounded-md">
+                            <img src="../{{ $product->path_picture }}" class="w-[200px] h-[200px]"></img>
                         @else
                             <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-md">
                                 <span class="text-gray-500">Нет изображения</span>
