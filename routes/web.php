@@ -66,10 +66,12 @@ Route::middleware('auth')->group(function () {
 
 
     // Comment -> 
-
+    //DELETE
+    Route::delete('/dashboard/{comment}/delete', [CommentController::class, 'destroy'])->name('comment.delete');
 
     //POST 
     Route::post('/dashboard/{product}/createcomment', [CommentController::class, 'store'])->name('comment.create');
+    
 
 });
 

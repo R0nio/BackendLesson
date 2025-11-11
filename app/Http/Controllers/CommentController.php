@@ -48,7 +48,13 @@ class CommentController extends Controller
         }
     }
 
-   
+   public function destroy($id)
+    {
+        $currentComment = Comment::findOrFail($id);
+        $currentComment->softDeleted();
+        return redirect()->back()->with('success', 'Комментарий успешно удален!');
+    
+    }
 
     /**
      * Display the specified resource.
@@ -77,8 +83,5 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }
