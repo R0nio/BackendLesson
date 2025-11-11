@@ -80,9 +80,14 @@
                                                         <div>{{ $comment->created_at }}</div>
                                                     </div>
                                                     <div class="mr-1 hover:underline transition-all">
-                                                        <a class="" href="{{ route('comment.delete', $comment->id) }}">
-                                                            Удалить
-                                                        </a>
+                                                        <form method="POST" action="{{route('comment.delete', $comment->id) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="underline" type="submit">
+                                                                Удалить
+                                                            </button>
+                                                        </form>
+                                                        
                                                     </div>
                                                 </div>
                                                 <div class="flex justify-center">

@@ -51,7 +51,7 @@ class CommentController extends Controller
    public function destroy($id)
     {
         $currentComment = Comment::findOrFail($id);
-        $currentComment->softDeleted();
+        $currentComment->delete();
         return redirect()->back()->with('success', 'Комментарий успешно удален!');
     
     }
